@@ -44,6 +44,16 @@
 
 ---
 
+## 1.6 作品介绍文档
+
+| 版本 | 位置 | 说明 |
+|---|---|---|
+| **PDF（推荐）** | [`docs/作品介绍_HyperDesign.pdf`](docs/作品介绍_HyperDesign.pdf) | 8 页 A4 正式排版：项目背景与四大行业痛点 / 系统技术架构（含全链路架构图与四层技术栈）/ 四个核心应用场景 / 五个核心创新点 / 实测验证与诚实声明 / 16 条参考文献 |
+| Markdown | [`docs/作品介绍_HyperDesign.md`](docs/作品介绍_HyperDesign.md) | 便于 GitHub 在线浏览与二次编辑 |
+| HTML 源 | [`docs/作品介绍_HyperDesign.html`](docs/作品介绍_HyperDesign.html) | 排版源文件，改完后一条命令重出 PDF |
+
+---
+
 ## 2. 目录与交付物
 
 ```

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>HyperDesign 作品介绍文档</title>
+<style>
+  @page { size: A4; margin: 15mm 14mm 14mm 14mm; }
+  * { box-sizing: border-box; }
+  html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+  body { font-family: "Microsoft YaHei", "MS YaHei", "PingFang SC", sans-serif; color: #1b232c; font-size: 10.2pt; line-height: 1.7; margin: 0; word-break: break-word; }
+  h1 { font-size: 21pt; margin: 0 0 4px; letter-spacing: .5px; color: #0d1b2a; }
+  h2 { font-size: 13.6pt; margin: 22px 0 9px; padding: 5px 0 5px 11px; border-left: 5px solid #00a8ff; color: #0d1b2a; background: #f2f7fb; page-break-after: avoid; }
+  h3 { font-size: 11.4pt; margin: 14px 0 5px; color: #0a4a73; page-break-after: avoid; }
+  h4 { font-size: 10.6pt; margin: 10px 0 4px; color: #17527a; page-break-after: avoid; }
+  p { margin: 5px 0; text-align: justify; }
+  ul, ol { margin: 5px 0 5px 0; padding-left: 20px; }
+  li { margin: 3px 0; }
+  code { font-family: Consolas, "Courier New", monospace; background: #eef3f7; padding: 1px 4px; border-radius: 3px; font-size: 9.3pt; color: #0b4f6c; }
+  table { width: 100%; max-width: 100%; table-layout: fixed; border-collapse: collapse; margin: 8px 0 10px; font-size: 9.3pt; page-break-inside: avoid; }
+  th { background: #0d1b2a; color: #fff; text-align: left; padding: 5px 7px; font-weight: 600; }
+  td { border-bottom: 1px solid #d8e2ea; padding: 5px 7px; vertical-align: top; word-break: break-word; }
+  tr:nth-child(even) td { background: #f8fbfd; }
+  .cover { border-top: 7px solid #00a8ff; padding-top: 16px; margin-bottom: 12px; }
+  .sub { font-size: 11pt; color: #4a5c6b; margin: 2px 0 10px; }
+  .meta { font-size: 9.3pt; color: #61727f; line-height: 1.9; }
+  .tag { display: inline-block; background: #e8f4fd; color: #0a6ea8; border: 1px solid #b9dcf3; border-radius: 11px; padding: 1px 9px; font-size: 8.8pt; margin: 0 4px 4px 0; }
+  .callout { background: #f4faf6; border-left: 4px solid #2ecc71; padding: 8px 11px; margin: 9px 0; font-size: 9.9pt; }
+  .warn { background: #fffaf0; border-left: 4px solid #e8a33d; padding: 8px 11px; margin: 9px 0; font-size: 9.9pt; }
+  .arch { font-family: Consolas, "Courier New", monospace; font-size: 7.1pt; line-height: 1.45; background: #0d1b2a; color: #d7e6f2; padding: 9px 10px; border-radius: 5px; white-space: pre; overflow: hidden; max-width: 100%; page-break-inside: avoid; }
+  .arch b { color: #63d2ff; font-weight: 600; }
+  .arch i { color: #8ee6a8; font-style: normal; }
+  .refs { font-size: 9.3pt; }
+  .refs li { margin: 4px 0; }
+  .kv { font-size: 9.6pt; }
+  .num { font-weight: 700; color: #0a6ea8; }
+  .ok { color: #1e8e4a; font-weight: 700; }
+  .no { color: #c0392b; font-weight: 700; }
+  .small { font-size: 9pt; color: #61727f; }
+  .pagebreak { page-break-before: always; }
+  footer { margin-top: 14px; border-top: 1px solid #d8e2ea; padding-top: 6px; font-size: 8.6pt; color: #7b8b98; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>HyperDesign —— 本地部署的自进化制造业产品设计 AI 系统</h1>
+  <div class="sub">作品介绍文档 · 从「像素逼真」到「几何真实」的制造业生成式 AI 全链路</div>
+  <div class="meta">
+    项目编号：proj_20261014_001　|　示范产品：工业级无线振动 / 温湿度三合一传感器外壳（120 × 80 × 45 mm，PC+ABS 上盖 + 铝合金 CNC 底座）<br />
+    代码仓库：<b>https://github.com/runming/HyperDesign</b>　|　演示视频：<code>docs/demo/HyperDesign_Demo_1080p.mp4</code>（1 分 46 秒，1080p）<br />
+    文档版本：v1.0　|　日期：2026-10-16
+  </div>
+  <div>
+    <span class="tag">100% 本地部署</span><span class="tag">私有工艺 RAG</span><span class="tag">Text-to-CAD 自愈闭环</span>
+    <span class="tag">DFM 物理硬约束</span><span class="tag">DPO 自进化飞轮</span><span class="tag">国标制图直连</span>
+    <span class="tag">单卡消费级硬件</span>
+  </div>
+</div>
+
+<h2>一、项目背景与行业痛点</h2>
+<p>在工业制造与硬件产品研发领域，生成式 AI（AIGC）的落地长期面临一道巨大的「车间鸿沟」——现有的图文生成与 3D 娱乐大模型虽能产出极具视觉冲击力的渲染图，却无法真正服务于生产制造。其核心症结在于四大行业痛点：</p>
+
+<h4>痛点 1：「像素幻觉」与「工程现实」脱节</h4>
+<p>传统 2D 生图工具（Midjourney / Stable Diffusion）生成的工业产品充斥违反物理规律的透视与光影伪影；主流 3D 生成模型导出的仅是拓扑杂乱、无物理毫米尺寸、非水密的三角网格（Mesh），无法直接用于 CNC 加工、注塑开模或钣金折弯。</p>
+
+<h4>痛点 2：缺乏可制造性设计（DFM）底层约束</h4>
+<p>通用大模型不具备企业私有的产线经验（特定机台的最小壁厚、拔模斜度、折弯扣除系数），生成方案常在结构评审阶段因无法脱模、壁厚不均或装配干涉而全盘推翻。</p>
+
+<h4>痛点 3：跨模态试错成本高昂</h4>
+<p>直接在参数化 CAD 阶段探索造型，修改周期极长；而在 2D 阶段探索，又缺乏自动化机制将「感性的视觉比例」无损还原为「理性的 B-Rep（边界表示法）参数化实体」。</p>
+
+<h4>痛点 4：数据隐私红线与模型进化难题</h4>
+<p>制造业核心工艺标准与历史图纸属高度机密，严禁上传公有云 API；同时企业需要一套零边际成本机制，把资深工程师日常的「审图判断」持续沉淀给本地模型，而非依赖昂贵算力集群重新预训练。</p>
+
+<div class="callout">
+<b>核心工程理念：设计可信度来自几何真实存在，而非像素逼真。</b>
+HyperDesign 打造了一套 100% 本地化部署、打通「概念发散 → 白模收敛 → 参数化 CAD → 生产工程图 → DPO 偏好自进化」全闭环的制造业 AI 系统。
+</div>
+
+<h2>二、系统技术架构</h2>
+<p>HyperDesign 采用「<b>多环境隔离解耦 + 统一事务状态机（<code>manifest.json</code>）+ 显存红绿灯动态调度</b>」的工程架构，将产品研发周期划分为 7 个紧密咬合的阶段。所有阶段的输入输出都汇聚到同一份 <code>manifest.json</code> 数据契约中，任一阶段可独立重跑而不破坏上下游。</p>
+
+<div class="arch">┌──────────────────────────────────────────────────────────────────────────────────┐
+│              HyperDesign 全链路架构（manifest.json 状态总线）                      │
+├──────────────────────────────────────────────────────────────────────────────────┤
+│ <b>[Phase 1 工艺大脑]</b>  Ollama 本地主控 LLM + Qdrant + bge-m3 私有工艺 RAG        │
+│      <i>↓ 注入壁厚/拔模角/材料约束，并转译为「3D 重建友好型」英文 Prompt</i>            │
+│ <b>[Phase 2 2D 发散]</b>   ComfyUI + FLUX.2-dev（正交透视 / 纯灰背景 / 均匀柔光母本） │
+│      <i>↓ 低成本视觉筛选 + VLM 初筛，用毕立即卸载显存</i>                             │
+│ <b>[Phase 3 3D 白模]</b>   WSL2 TRELLIS 微服务（稀疏体素 → SLAT 重建）+ Blender 无头清洗│
+│      <i>↓ 赋予真实 mm 级物理包络、底面坐平 Z=0、水密化与减面，导出 GLB/STL</i>         │
+│ <b>[Phase 4 交互审阅]</b>  Three.js 工业检视台（360° 旋转 / 线框 / Z 轴实时截面剖析）  │
+│      <i>↓ 人工勾选优胜方案 + 锁定包络尺寸 → 自动归档 DPO 正负样本对</i>                │
+│ <b>[Phase 5 精确 CAD]</b>  白模三层切片锚点 + FreeCAD/OpenCascade + OCC 自愈循环      │
+│      <i>↓ 拓扑合法性 / 体积 / ±1.5mm 包络三重数学校验 → 直出 .step</i>                │
+│ <b>[Phase 6 生产对接]</b>  OpenCascade HLR 投影 + ezdxf 国标分层 + 尺寸与标题栏       │
+│      <i>↓ 直出 1:1 激光切割净片 .dxf + A3 工程图 .dxf/.pdf（300dpi）</i>              │
+│ <b>[Phase 7 进化闭环]</b>  DFM 射线测厚/拔模角硬校验 + VLM 初筛 + Unsloth QLoRA/DPO   │
+│      <i>↓ 黄金基准集回归守门员：新模型未全面超越则禁止切流</i>                        │
+└──────────────────────────────────────────────────────────────────────────────────┘</div>
+
+<h3>2.1 四层核心技术栈</h3>
+<table>
+  <tr><th style="width:20%">层级</th><th style="width:16%">阶段</th><th>技术组成与职责</th></tr>
+  <tr><td><b>认知与知识检索层</b></td><td>Phase 1</td><td>Qdrant 向量库 + <code>BAAI/bge-m3</code> 稠密向量（1024 维 COSINE）+ Ollama 本地大模型；实现企业注塑 / CNC / 钣金规范的精准检索与<b>硬性参数注入</b>，并以「规范数值必须原样引用」为铁律约束生成。</td></tr>
+  <tr><td><b>视觉与三维网格层</b></td><td>Phase 2–4</td><td>ComfyUI API 驱动 FLUX.2-dev 批量生成符合三维重建几何锚点的 2D 概念图；WSL2 容器化封装的 <code>TRELLIS-image-large</code> 恢复三维结构；Windows 原生 Blender 无头脚本完成减面、水密化与真实毫米尺寸校准；前端基于原生 ES Module 的 Three.js 零构建审阅台。</td></tr>
+  <tr><td><b>计算几何与制图交付层</b></td><td>Phase 5–6</td><td>Trimesh 提取白模多高度截面比例，驱动 FreeCAD / CadQuery（OpenCascade 内核）生成全参数化 B-Rep 实体（<code>.step</code>）；OCC HLR（隐藏线消除）算法 + ezdxf 自动绘制符合 GB/T 图层标准的 2D 工程图（<code>.dxf</code> / <code>.pdf</code>），并预留 COM 接口对接浩辰 / 中望 / AutoCAD。</td></tr>
+  <tr><td><b>评判与自进化层</b></td><td>Phase 7</td><td>法向射线测厚（Ray-Casting）+ 拔模斜度场分析 + 本地 VLM 视觉评分 + Unsloth 4-bit QLoRA / DPO 训练框架；配黄金基准测试集（Benchmark）回归验证的本地模型迭代流水线。</td></tr>
+</table>
+
+<h3>2.2 本机落地技术栈（可复现的真实配置）</h3>
+<p class="small">下表为本项目实际跑通所用的组件与版本；括号内标注与《工程文件》规划稿有差异的部分，全部差异与原因记录于仓库 <code>issues.md</code>（24 条）。</p>
+<table>
+  <tr><th style="width:22%">组件</th><th style="width:40%">本机实际配置</th><th>说明 / 规划稿差异</th></tr>
+  <tr><td>推理显卡</td><td>NVIDIA RTX 5080 16GB（单卡）</td><td>全链路最紧资源，需显存接力调度</td></tr>
+  <tr><td>主控大模型</td><td><code>qwen38-uncensored-128k</code>（27.3B，Ollama 本地）</td><td>规划稿为 Qwen3.5-9B，本机不可得</td></tr>
+  <tr><td>视觉初筛 VLM</td><td><code>qwen3.7-flash</code>（8.3B）</td><td>规划稿为 Qwen2.5-VL-7B</td></tr>
+  <tr><td>向量库</td><td><code>qdrant-client</code> 嵌入式持久化</td><td>宿主无 Docker，改用嵌入式（接口语义一致）</td></tr>
+  <tr><td>向量模型</td><td><code>BAAI/bge-m3</code>（fp16，1024 维）</td><td>与规划一致</td></tr>
+  <tr><td>出图引擎</td><td>ComfyUI 0.9.1 + <code>flux2_dev_fp8mixed</code> + Mistral-3-Small 文本编码器</td><td>规划稿为 FLUX.1-dev；本机权重为 FLUX.2-dev</td></tr>
+  <tr><td>3D 重建</td><td>WSL2 + TRELLIS-image-large（torch 2.11.0+cu128 / spconv / xformers）</td><td>与规划一致（<code>ATTN_BACKEND=xformers</code>、<code>SPCONV_ALGO=native</code>）</td></tr>
+  <tr><td>网格精修</td><td>Blender 4.2.9 便携版无头脚本</td><td>与规划一致（<code>blender-mcp</code> 未启用，流程全自动）</td></tr>
+  <tr><td>CAD 内核</td><td><b>FreeCAD 1.1.4 自带 OpenCascade</b>（104 <code>freecadcmd</code> 无头校验）</td><td>本机 OCP/CadQuery 原生扩展无法加载（见 issues #6），改用工程文件同样指定的 FreeCAD；CadQuery 版实现保留备查</td></tr>
+  <tr><td>制图与打印</td><td>ezdxf 1.4 + matplotlib 3.11（A3 300dpi）</td><td>与规划一致</td></tr>
+  <tr><td>进化训练</td><td>WSL2 Unsloth 2026.10.6 + torch 2.11.0+cu128 + Qwen2.5-7B-Instruct-bnb-4bit</td><td>与规划一致（QLoRA r16 / DPO beta 0.1）</td></tr>
+</table>
+
+<h3>2.3 关键实测指标（本机一次完整跑通的真实数据）</h3>
+<table>
+  <tr><th style="width:26%">阶段节点</th><th style="width:30%">实测结果</th><th>工程含义</th></tr>
+  <tr><td>私有规范引用校验</td><td class="ok">PASS</td><td>回答逐字引用 <span class="num">2.4 mm</span> / <span class="num">1.44 mm</span> / <span class="num">≥1.8°</span>，拒绝通用 2.0 mm</td></tr>
+  <tr><td>概念图生成</td><td>4/4 张，114–136 s/张</td><td>1024²、base_seed=88400、纯灰背景、无裁切</td></tr>
+  <tr><td>VLM 初筛</td><td>几何清晰 8 / 制造可行 9 / 需求对齐 8</td><td>四张方案一致性良好</td></tr>
+  <tr><td>TRELLIS 重建</td><td>17–32 s/次</td><td>WSL2 微服务 <code>:8003</code>，sparse12/cfg7.5 + slat12/cfg3.0</td></tr>
+  <tr><td>Blender 清洗</td><td>973,462 → <span class="num">388,391</span> 面；X=120 mm；Z<sub>min</sub>=0</td><td>毫米级物理对齐，底面坐平工业基准面</td></tr>
+  <tr><td>参数化 CAD 自愈</td><td class="ok">第 1 轮一次通过</td><td>BRep <code>isValid()=True</code>，体积 <span class="num">69,042.2 mm³</span>，包络 <span class="num">120.0 × 80.0 × 45.0 mm（偏差 0）</span></td></tr>
+  <tr><td>工程图输出</td><td>510 条轮廓 + 3 处检验尺寸 + 标题栏</td><td>图层 <code>CUT_PROFILE / HIDDEN_LINE / DIMENSIONS / TITLE_BLOCK</code> 分离</td></tr>
+  <tr><td>DFM 硬校验（白模）</td><td class="no">未通过</td><td>水密=否 / p10 壁厚 1.51 mm / 立面拔模 0.84°——生成式网格固有特性，白模仅作造型比例锚点（见第五节）</td></tr>
+  <tr><td>进化与守门员</td><td>LoRA 训练成功（0.52% 参数，27.6 s）→ GGUF Q4_K_M → 注册 <code>hd-brain:v20261016_1326</code></td><td>黄金基准回归：旧模型 Pass@1 = 1/1，进化版 0/1 → <b>allowed_to_switch = false，禁止切流</b></td></tr>
+</table>
+
+<div class="pagebreak"></div>
+<h2>三、核心应用场景</h2>
+
+<h3>场景 1｜工业外壳与结构件敏捷开发（注塑 / 压铸）</h3>
+<p><b>场景描述：</b>针对智能硬件外壳、工业传感器护罩、手持终端等产品，工程师仅需输入一句功能描述与安装尺寸包络，系统自动调取车间注塑机规范（如强制名义壁厚 <span class="num">2.4 mm</span>、拔模角 <span class="num">≥1.8°</span>），在一次会话内完成从 4 组差异化造型探索到可报价 <code>.step</code> 实体模型的转化。</p>
+<p class="small"><b>本机实证：</b>4 张概念图 ≈ 9 min（114–136 s/张）→ TRELLIS 重建 32 s → Blender 清洗 9 s → CAD 代码生成 466 s → OCC 校验通过，产出 <code>parametric_model.step</code>（54.9 KB，BRep 合法）+ 参数化源码。</p>
+
+<h3>场景 2｜钣金与激光切割件快速排产（激光 / 数控折弯）</h3>
+<p><b>场景描述：</b>针对设备支架、控制盒底座、法兰转接板等零件，系统生成参数化三维模型后，Phase 6 自动剥离图框与尺寸线，直出 1:1 纯净外轮廓与孔位 <code>laser_1to1.dxf</code>，可直接导入柏楚 CypCut 等激光切割 CAM 软件排料切割。</p>
+<p class="small"><b>本机实证：</b><code>proj_20261014_001_laser_1to1.dxf</code>（TOP 投影 82 条轮廓实体，仅 <code>CUT_PROFILE</code> 图层、零尺寸线污染）。</p>
+
+<h3>场景 3｜非标机械零部件系列化派生</h3>
+<p><b>场景描述：</b>Phase 5 产出的并非死模型，而是带顶部全局参数表的标准参数化源码（<code>LENGTH_X</code>、<code>BOSS_INSET</code>、<code>WALL_THICKNESS</code> 等），结构工程师只需修改变量，即可在 1 秒内派生出同产品家族不同规格的 <code>.step</code> 与 <code>.dxf</code> 图纸。</p>
+<p class="small"><b>本机实证：</b><code>05_cad/parametric_model.py</code> 顶部参数表 + 注释齐全；自愈引擎即以此文件为「可复现资产」而非一次性脚本。</p>
+
+<h3>场景 4｜跨部门 / 外协供应商免插件三维协同审阅</h3>
+<p><b>场景描述：</b>通过 Phase 4 的单文件便携打包器，将精修白模与包络标尺内嵌为独立 <code>.html</code>，客户、采购与外协模具厂无需安装笨重专业 CAD，在手机或浏览器中即可 360° 旋转并拖动滑块剖析内部腔体结构。</p>
+<p class="small"><b>本机实证：</b><code>04_viewer/proj_20261014_001_3D_Concept_Share.html</code>（68 MB，GLB + 概念图 + manifest 全内嵌，双击即看，零服务器、零依赖）。</p>
+
+<h2>四、项目核心创新点</h2>
+
+<h3>创新点 1｜提出「几何真实优先（Geometry-First）」的跨模态尺寸锚定机制</h3>
+<p>解决了从 2D 概念图 → 3D Mesh → 参数化 CAD 全过程中「物理尺寸丢失」的核心难题。系统通过全局事务契约 <code>manifest.json</code> 贯穿始终：Phase 3 用 Blender 将归一化网格强制对齐至真实毫米包络（坐平 Z=0 基准面），Phase 5 首创「<b>白模三层高度（10% / 50% / 90%）激光切片采样法</b>」，把感性的美学长宽高比例精确翻译为理性 CAD 代码的草图尺寸约束。</p>
+<p class="small"><b>实测：</b>三层截面分别输出 <code>bottom_10pct / mid_50pct / top_90pct</code> 的 z、span_x、span_y 锚点并注入建模提示词，最终 CAD 包络与目标值偏差为 0。</p>
+
+<h3>创新点 2｜基于 OpenCascade 硬件级反馈的 Text-to-CAD「自愈闭环（Self-Healing Loop）」</h3>
+<p>打破大模型写 CAD 代码「一次生成成功率低、拓扑易崩溃」的瓶颈。系统把生成的代码置于沙箱运行，直接调用 OpenCascade 底层内核做数学级检验：实体 <code>isValid()</code> 拓扑合法性、体积 &gt; 1 mm³、三轴 Bounding Box 误差严控在 <b>±1.5 mm</b> 内，并核查 STEP 实体文件确实落盘。一旦捕获 <code>BRep_API: command not done</code> 倒角报错或尺寸超差，自动把报错堆栈回传主控模型进行最多 <b>5 轮</b>自我修复；失败代码与成功代码同时被捕获为 DPO 负 / 正样本。</p>
+<p class="small"><b>实测：</b>示范项目第 1 轮一次通过；基准题 <code>bench_01</code> 上旧主控同样一次通过（体积 70,262 mm³，包络 120×80×45）。</p>
+
+<h3>创新点 3｜「客观 DFM 物理信号 &gt; VLM 主观打分 &gt; 人类终审」的三级评判体系</h3>
+<p>不同于纯视觉系统仅靠多模态大模型「看图打分」，HyperDesign 坚持工程物理规律一票否决权。Phase 7 中系统向网格内部发射 <b>500 条反向法线射线（Ray-Casting）</b>量化测量真实局部壁厚分布（取 10% 分位最薄处 p10 作为判据），并结合面法向量倾角统计拔模斜度、检查水密性与包络漂移（&gt;8% 淘汰）。只有通过物理 DFM 硬指标的方案，才进入 VLM 视觉评分与人工选品台，彻底杜绝「好看但造不出」的废案。</p>
+<p class="small"><b>实测：</b>Phase 3 生成式白模被该体系判为「不通过」（水密=否、p10=1.51 mm、拔模 0.84°），系统随即改以「白模只作造型锚点、制造实体由 Phase 5 按工艺铁律重建」的路径推进——评判体系真实发挥了拦截作用。</p>
+
+<h3>创新点 4｜零边际成本的「日常工作即训练（Work-as-Training）」DPO 进化飞轮</h3>
+<p>把模型微调数据收集完全隐形化融入设计师日常工作流：Phase 4 审阅台中，设计师从 4 张方案里勾选 1 张推进 3D 时，系统自动把 (Brief, 选中 Prompt, 淘汰 Prompt) 组装为视觉偏好样本对；Phase 5 自愈循环中，自动把 (建模需求, 编译通过且尺寸合规的代码, 报错或超差的代码) 捕获为 CAD 代码偏好样本对。配合 Unsloth 本地 4-bit QLoRA 与 DPO（直接偏好优化）及黄金基准集回归测试，无需额外标注人力、无需云端算力费用。</p>
+<p class="small"><b>实测：</b>一次审阅提交即自动落盘 3 条 <code>(prompt, chosen, rejected)</code>；Unsloth QLoRA+DPO 训练链路完整跑通（LoRA 40.37 M 可训练参数 / 占 0.52%，3 步 27.6 s），并成功导出 GGUF Q4_K_M 注册进 Ollama。</p>
+
+<h3>创新点 5｜单机消费级硬件下的「显存红绿灯」接力与国标制图直连</h3>
+<p>针对本地工作站同时部署 LLM、FLUX、TRELLIS 等多个重型模型极易爆显存（OOM）的痛点，设计了严格的显存生命周期管理：Ollama <code>keep_alive=0</code>、ComfyUI <code>POST /free</code>、TRELLIS <code>POST /unload</code> 三者在阶段边界联动卸载，使单张消费级 16GB 显卡能够平稳接力百亿参数级多模态流水线。同时在末端内置 GB/T 机械制图图层规范（实线切割层 / 虚线隐藏层 / 关联标注层 / 图框标题栏分层），真正走完从 AI 到工厂车间的「最后一公里」。</p>
+<p class="small"><b>实测：</b>曾定位并修复 Windows 提交内存（commit limit）耗尽导致的 <code>os error 1455</code>——ComfyUI 默认 pinned memory 占用 43.9 GB，叠加 33 GB UNet 与 33 GB 文本编码器后触顶；关闭 pinned memory 并迁移 32 GB 模型库后全链路稳定。</p>
+
+<h2>五、实测验证、已知限制与工程取舍</h2>
+<table>
+  <tr><th style="width:22%">阶段</th><th style="width:30%">验收项</th><th>结论</th></tr>
+  <tr><td>Phase 1</td><td>私有规范数值原样引用</td><td class="ok">PASS（2.4 / 1.44 / 1.8°）</td></tr>
+  <tr><td>Phase 2</td><td>4 张概念图 + 纯灰背景 + 无裁切</td><td class="ok">4/4 PASS</td></tr>
+  <tr><td>Phase 3</td><td>清洗白模 GLB/STL + 真实包络回填</td><td class="ok">PASS（388,391 面）</td></tr>
+  <tr><td>Phase 3.5</td><td>DFM 硬规则 + VLM 双层初筛</td><td class="warn" style="padding:5px 7px">白模 DFM 未通过（设计内预期，作造型锚点）</td></tr>
+  <tr><td>Phase 4</td><td>审阅台交互 + 提交归档 DPO</td><td class="ok">PASS（3 条偏好样本对）</td></tr>
+  <tr><td>Phase 5</td><td>BRep 合法 / 体积 / 包络 ±1.5 mm</td><td class="ok">PASS（69042.2 mm³，120×80×45，Z=0）</td></tr>
+  <tr><td>Phase 6</td><td>1:1 激光 DXF + A3 图 + 300dpi PDF</td><td class="ok">PASS（4 图层 + 标题栏工艺铁律）</td></tr>
+  <tr><td>Phase 7</td><td>DPO 训练 → GGUF → Ollama + 守门员回归</td><td class="ok">机制 PASS；守门员判定「禁止切流」（样本不足）</td></tr>
+</table>
+
+<div class="warn">
+<b>诚实声明（工程取舍与限制）：</b>
+<ol style="margin:4px 0 0 0">
+  <li><b>生成式白模的 DFM 不达标属行业固有现象</b>：单图重建的网格不水密、壁厚与拔模不可控。HyperDesign 的应对是把它降级为「造型比例参考」，制造实体由 Phase 5 依据企业工艺规范重新参数化生成，并通过 OCC 数学校验——这也正是三级评判体系存在的意义。</li>
+  <li><b>DPO 效果需要样本量</b>：本次仅用 3 条偏好样本做机制验证，进化版（7B-Q4）在黄金基准上未超越旧主控（27B），守门员正确阻止了切流。按《工程文件》建议，攒够 50–100 条样本后再做正式进化。</li>
+  <li><b>本机 CadQuery/OCP 原生扩展无法加载</b>（多个版本与解释器均复现），故 Phase 5/6 改用工程文件同样指定的 FreeCAD 自带 OpenCascade 内核；算法与交付物完全等价，CadQuery 版实现保留于仓库备查。</li>
+  <li><b>未启用的规划项</b>：<code>blender-mcp</code> / <code>freecad-mcp</code> / CAD-COM 桥接在本机流程中未启用（全自动无头链路已覆盖需求），保留为人工精修接口。</li>
+</ol>
+</div>
+
+<h2>六、参考文献</h2>
+<ol class="refs">
+  <li>Xiang J., Lv B., Deng Y., et al. <i>Structured 3D Latents for Scalable and Versatile 3D Generation</i> (TRELLIS). arXiv:2412.01506, 2024. <span class="small">https://arxiv.org/abs/2412.01506</span></li>
+  <li>Chen J., Xiao S., Zhang P., Luo K., Lian D., Liu Z. <i>M3-Embedding: Multi-Linguality, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation</i> (BGE-M3). arXiv:2402.03216, 2024. <span class="small">https://arxiv.org/abs/2402.03216</span></li>
+  <li>Black Forest Labs. <i>FLUX.2: Frontier Visual Intelligence</i>. 2025. <span class="small">https://bfl.ai/blog/flux-2</span></li>
+  <li>Shen T., Munkberg J., Hasselgren J., et al. <i>Flexible Isosurface Extraction for Gradient-Based Mesh Optimization</i> (FlexiCubes). arXiv:2308.05371, SIGGRAPH 2023. <span class="small">https://arxiv.org/abs/2308.05371</span></li>
+  <li>Rafailov R., Sharma A., Mitchell E., et al. <i>Direct Preference Optimization: Your Language Model is Secretly a Reward Model</i>. arXiv:2305.18290, NeurIPS 2023. <span class="small">https://arxiv.org/abs/2305.18290</span></li>
+  <li>Dettmers T., Pagnoni A., Holtzman A., Zettlemoyer L. <i>QLoRA: Efficient Finetuning of Quantized LLMs</i>. arXiv:2305.14314, NeurIPS 2023. <span class="small">https://arxiv.org/abs/2305.14314</span></li>
+  <li>Liu X., Gong C., Liu Q. <i>Flow Straight and Fast: Learning to Generate and Transfer Data with Rectified Flow</i>. arXiv:2209.03003, ICLR 2023. <span class="small">https://arxiv.org/abs/2209.03003</span></li>
+  <li>Unsloth AI. <i>Unsloth: 2× faster LLM finetuning</i>（本地 4-bit QLoRA / DPO 训练框架）. <span class="small">https://github.com/unslothai/unsloth</span></li>
+  <li>Qdrant. <i>Qdrant Vector Database Documentation</i>（向量检索与 COSINE 距离度量）. <span class="small">https://qdrant.tech/documentation/</span></li>
+  <li>ezdxf. <i>ezdxf — Python DXF read/write library Documentation</i>（R2010 DXF 与图层 / 线型 / 标注 API）. <span class="small">https://ezdxf.readthedocs.io/</span></li>
+  <li>Open CASCADE Technology. <i>OCCT Documentation — HLR (Hidden Line Removal) &amp; BRep Topology Validation</i>. <span class="small">https://dev.opencascade.org/doc/overview/html/</span></li>
+  <li>FreeCAD. <i>FreeCAD 1.1 Documentation — Part / TechDraw Workbench</i>. <span class="small">https://wiki.freecad.org/</span></li>
+  <li>Blender Foundation. <i>Blender 4.2 LTS Manual — Python API (bpy) 与网格处理</i>. <span class="small">https://docs.blender.org/manual/en/4.2/</span></li>
+  <li>three.js. <i>three.js Documentation — GLTFLoader / Clipping Planes / BoxHelper</i>. <span class="small">https://threejs.org/docs/</span></li>
+  <li>中华人民共和国国家标准. <i>GB/T 14665 机械工程 CAD 制图规则</i>；<i>GB/T 1804 一般公差 未注公差的线性和角度尺寸的公差</i>.</li>
+  <li>中华人民共和国国家标准. <i>GB/T 1182 产品几何技术规范(GPS) 几何公差</i>（图纸技术要求与检验依据引用）.</li>
+</ol>
+
+<footer>
+  HyperDesign · 本地部署的自进化制造业产品设计 AI 系统　|　代码仓库 github.com/runming/HyperDesign　|　
+  全过程实时日志见仓库 <code>progress.log</code>，24 条工程问题与偏差见 <code>issues.md</code>，环境复现见 <code>SETUP.md</code>。
+</footer>
+
+</body>
+</html>
