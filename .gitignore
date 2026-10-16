@@ -45,3 +45,6 @@ docs/demo/_seg/
 
 # 便携版 Blender（1.3GB，按 SETUP.md 自行下载解压）
 tools/
+
+# 分发物（git bundle，供离线克隆/上传）
+dist/
