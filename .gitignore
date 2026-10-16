@@ -1,0 +1,47 @@
+# ---- 大体积/机器相关产物不入库（按《工程文件》说明由脚本自动下载/生成）----
+# 模型权重与缓存
+models/
+!models/checkpoints/dpo_dataset/
+!models/checkpoints/dpo_dataset/*.jsonl
+!models/checkpoints/benchmark_*.json
+qdrant_storage/
+*.safetensors
+*.gguf
+*.onnx
+*.pth
+*.pt
+*.bin
+
+# 生成的大几何资产（可由 Phase3/5/6 重跑得到）
+*.glb
+*.stl
+*.step
+*.stp
+*.dxf
+*.3mf
+*.obj
+
+# 生成物：保留 docs/ 下的演示与证据素材，其余忽略
+*.pdf
+!docs/**/*.pdf
+
+# venv / 解释器 / 依赖缓存
+venvs/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.cache/
+node_modules/
+
+# 日志与运行期状态
+logs/*.log
+*.tmp
+*.incomplete
+
+# 便携包（68MB，可由 export_portable_html.py 重新生成）
+04_viewer/
+docs/demo/_seg/
+
+# 便携版 Blender（1.3GB，按 SETUP.md 自行下载解压）
+tools/

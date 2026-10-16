@@ -1,0 +1,208 @@
+{
+  "project_id": "proj_20261014_001",
+  "created_at": "2026-10-16 11:46:57",
+  "product": "工业无线振动/温湿度三合一传感器外壳 (电机表面安装)",
+  "target_bbox_mm": {
+    "x": 120,
+    "y": 80,
+    "z": 45
+  },
+  "mfg_constraints": {
+    "process": "注塑成型(上盖 PC+ABS) + CNC(铝合金底座)",
+    "workshop": "二号车间",
+    "min_wall_thickness_mm": 2.4,
+    "rib_max_thickness_mm": 1.44,
+    "min_draft_angle_deg": 1.8,
+    "source": "内部注塑工艺规范_v2.4.pdf"
+  },
+  "phase1_brain_rag": {
+    "collection": "mfg_knowledge_base",
+    "embed_model": "BAAI/bge-m3",
+    "llm_model": "qwen38-uncensored-128k:latest",
+    "docs_ingested": 6,
+    "retrieved_sources": [
+      "内部注塑工艺规范_v2.4.pdf",
+      "工程文件_Phase2_产品设计任务书.docx",
+      "工程文件_Phase7_DFM双层评判.docx"
+    ],
+    "retrieved_contents": [
+      "我司二号车间海天注塑机加工 PC+ABS 材质工业外壳时，凡外壳最大跨度超过 150mm 的产品，标准名义壁厚必须设定为 2.4mm（严禁采用通用 2.0mm），内侧加强筋厚度不得超过名义壁厚的 60%（即 1.44mm），否则极易产生表面缩水纹；拔模斜度统一要求 ≥ 1.8°。",
+      "产品：工业级无线振动温湿度三合一传感器外壳（安装在电机表面）。尺寸包络：120mm x 80mm x 45mm。工艺要求：顶部为 PC+ABS 抗冲击注塑上盖（壁厚2.4mm，拔模角1.8度，带状态指示灯导光柱窗口），底部为铝合金 CNC 底座（带两侧M6安装耳和磁吸沉孔），上下壳通过4颗内六角螺钉锁紧并夹持硅胶防水圈。",
+      "HyperDesign 双层自动评判引擎：客观几何铁律 > VLM 主观审美。壁厚红线扫描（Min Wall Thickness）：从零件表面向内发射法向射线测量真实局部壁厚，若二号车间要求 >= 2.4mm，而实测存在 < 1.8mm 的薄壁区（注塑欠注风险）或 > 4.5mm 的肥厚积料区（缩水纹风险），直接判定为 rejected；拔模角扫描（Draft Angle Check）：统计所有近似平行于脱模方向（Z 轴）的立面法向量夹角，识别零度直壁（卡模拉伤风险）。只有通过第一关几何硬指标的方案，才送 VLM 检查视觉特征是否漏项（如：需求要求的顶部状态指示灯导光窗口、两侧 M6 安装耳是否在图中清晰可见）。随机采样 500 个表面点向内发射反向法线射线，取 10% 分位最薄处壁厚作为 p10_thickness 判据。"
+    ],
+    "acceptance_question": "现在要设计一款跨度 180mm 的 PC+ABS 材质手持终端外壳，交由二号车间生产，请问名义壁厚、加强筋厚度和拔模斜度应该定多少？",
+    "acceptance_answer": "# 180 mm PC+ABS 手持终端外壳 — 关键工艺参数\n\n依据 **《内部注塑工艺规范 v2.4》**（二号车间海天注塑机 / PC+ABS 工业外壳条款），本件最大跨度 **180 mm > 150 mm** 触发\"大跨度\"强制条款，三项参数锁定如下：\n\n| 参数 | 规定值 | 规范原文依据 |\n|---|---|---|\n| **名义壁厚** | **2.4 mm**（严禁采用通用 2.0 mm） | \"凡外壳最大跨度超过 150 mm 的产品，标准名义壁厚必须设定为 2.4 mm\" |\n| **内侧加强筋厚度** | **≤ 1.44 mm**（即名义壁厚的 60 %） | \"内侧加强筋厚度不得超过名义壁厚的 60 %（即 1.44 mm），否则极易产生表面缩水纹\" |\n| **拔模斜度** | **≥ 1.8°** | \"拔模斜度统一要求 ≥ 1.8°\" |\n\n## 补充提醒（来自 Phase 7 DFM 双层评判引擎）\n\n- **壁厚红线扫描**：DFM 自动检测会以 p10 分位（500 个采样点中 10 % 最薄处）为判据。若实测存在 **< 1.8 mm** 的薄壁区（欠注风险）或 **> 4.5 mm** 的肥厚积料区（缩水纹风险），方案直接判 **rejected**。因此建模时除名义 2.4 mm 外，还需关注局部过渡、螺钉柱根部、导光柱窗口周边等易出现壁厚突变的位置。\n- **拔模角扫描**：所有近似平行于脱模方向（Z 轴）的立面，法向量与 Z 轴夹角必须 ≥ 1.8°；出现零度直壁会被标记为\"卡模拉伤风险\"。\n- 以上几何硬指标全部通过后，才会进入 VLM 视觉特征检查（如指示灯导光窗口、安装耳等是否清晰可见）。\n\n> **一句话结论**：名义壁厚 **2.4 mm**、加强筋 **≤ 1.44 mm**、拔模斜度 **≥ 1.8°**——三项均为二号车间 PC+ABS 大跨度件的强制下限/上限，不可用通用 2.0 mm 替代。",
+    "acceptance_citations_ok": true
+  },
+  "phase2_candidates": [
+    {
+      "concept_id": "concept_1",
+      "variant_name": "Hard Angular Faceted",
+      "seed": 88400,
+      "flux_prompt": "Industrial wireless vibration + temperature/humidity 3-in-1 sensor enclosure mounted on a motor, 120 x 80 x 45 mm envelope, hard-edged faceted architecture with crisp planar chamfered surfaces, angular bold silhouette, PC+ABS injection molded top cover with 2.4mm nominal wall and 1.8 degree draft, top status LED light-pipe window, brushed aluminum CNC base with two M6 mounting ears, 4 x M4 hex socket screws clamping a silicone gasket, Single whole product only, isometric three-quarter view, centered in frame, orthographic-like lens (no wide-angle distortion). Isolated on solid flat neutral light grey background (#E5E5E5), no props, no text, no watermark. Even studio softbox diffuse lighting, ambient occlusion, no harsh cast shadows, no specular mirror highlights. Industrial product design prototype, clean CAD-like chamfered edges and visible parting lines, matte plastic and brushed aluminum texture, realistic industrial manufacturing proportions, flat matte surface finish suitable for photogrammetry-grade 3D reconstruction.",
+      "image_path": "D:\\hyperdesign\\workspace\\proj_20261014_001\\02_concepts\\concept_1_HardAngularFacet_seed88400.png",
+      "comfy_filename": "hd_p2_HardAngularFacet_seed88400_00002_.png",
+      "gen_seconds": 129.5,
+      "status": "generated",
+      "bg_check": {
+        "error": "ModuleNotFoundError(\"No module named 'PIL'\")",
+        "pass": false
+      },
+      "vlm_score": {
+        "geometry_clarity": 8,
+        "manufacturing_feasibility": 9,
+        "brief_alignment": 8,
+        "reason": "设计轮廓清晰，背景干净，但顶部导光柱窗口的形状和位置需要进一步优化以确保与状态指示灯的兼容性。分型线和倒角符合注塑逻辑，但装配螺钉位的布局需要调整以确保与实际安装需求一致。"
+      },
+      "vlm_verdict": "{\"score\": 9, \"background_clean\": true, \"fully_visible\": true, \"no_mirror_highlight\": true, \"led_window_visible\": true, \"mounting_ears_visible\": true, \"reason\": \"背景纯灰无杂物，产品完整无裁切，无镜面高光死黑，顶部导光柱窗口与两侧安装耳清晰可见。\"}",
+      "selected_for_3d": false
+    },
+    {
+      "concept_id": "concept_2",
+      "variant_name": "Rounded Streamlined",
+      "seed": 88401,
+      "flux_prompt": "Industrial wireless vibration + temperature/humidity 3-in-1 sensor enclosure mounted on a motor, 120 x 80 x 45 mm envelope, soft rounded streamlined surfaces with generous continuous fillets and smooth organic flow, PC+ABS injection molded top cover with 2.4mm nominal wall and 1.8 degree draft, top status LED light-pipe window, brushed aluminum CNC base with two M6 mounting ears, 4 x M4 hex socket screws clamping a silicone gasket, Single whole product only, isometric three-quarter view, centered in frame, orthographic-like lens (no wide-angle distortion). Isolated on solid flat neutral light grey background (#E5E5E5), no props, no text, no watermark. Even studio softbox diffuse lighting, ambient occlusion, no harsh cast shadows, no specular mirror highlights. Industrial product design prototype, clean CAD-like chamfered edges and visible parting lines, matte plastic and brushed aluminum texture, realistic industrial manufacturing proportions, flat matte surface finish suitable for photogrammetry-grade 3D reconstruction.",
+      "image_path": "D:\\hyperdesign\\workspace\\proj_20261014_001\\02_concepts\\concept_2_RoundedStreamlin_seed88401.png",
+      "comfy_filename": "hd_p2_RoundedStreamlin_seed88401_00001_.png",
+      "gen_seconds": 120.5,
+      "status": "generated",
+      "bg_check": {
+        "error": "ModuleNotFoundError(\"No module named 'PIL'\")",
+        "pass": false
+      },
+      "vlm_score": {
+        "geometry_clarity": 8,
+        "manufacturing_feasibility": 9,
+        "brief_alignment": 8,
+        "reason": "设计轮廓清晰，背景干净，但顶部导光柱窗口的形状和位置需要进一步优化以确保与状态指示灯的兼容性。分型线和倒角符合注塑逻辑，但装配螺钉位的布局需要调整以确保与实际安装需求一致。"
+      },
+      "vlm_verdict": "{\"score\": 9, \"background_clean\": true, \"fully_visible\": true, \"no_mirror_highlight\": true, \"led_window_visible\": true, \"mounting_ears_visible\": true, \"reason\": \"背景干净，产品完整，无镜面高光，顶部导光柱窗口与两侧安装耳清晰可见\"}",
+      "selected_for_3d": false
+    },
+    {
+      "concept_id": "concept_3",
+      "variant_name": "Modular Armored",
+      "seed": 88402,
+      "flux_prompt": "Industrial wireless vibration + temperature/humidity 3-in-1 sensor enclosure mounted on a motor, 120 x 80 x 45 mm envelope, modular armored construction with visible bolted sub-panels and rugged machined armor plates, PC+ABS injection molded top cover with 2.4mm nominal wall and 1.8 degree draft, top status LED light-pipe window, brushed aluminum CNC base with two M6 mounting ears, 4 x M4 hex socket screws clamping a silicone gasket, Single whole product only, isometric three-quarter view, centered in frame, orthographic-like lens (no wide-angle distortion). Isolated on solid flat neutral light grey background (#E5E5E5), no props, no text, no watermark. Even studio softbox diffuse lighting, ambient occlusion, no harsh cast shadows, no specular mirror highlights. Industrial product design prototype, clean CAD-like chamfered edges and visible parting lines, matte plastic and brushed aluminum texture, realistic industrial manufacturing proportions, flat matte surface finish suitable for photogrammetry-grade 3D reconstruction.",
+      "image_path": "D:\\hyperdesign\\workspace\\proj_20261014_001\\02_concepts\\concept_3_ModularArmored_seed88402.png",
+      "comfy_filename": "hd_p2_ModularArmored_seed88402_00001_.png",
+      "gen_seconds": 114.5,
+      "status": "generated",
+      "bg_check": {
+        "error": "ModuleNotFoundError(\"No module named 'PIL'\")",
+        "pass": false
+      },
+      "vlm_score": {
+        "geometry_clarity": 8,
+        "manufacturing_feasibility": 9,
+        "brief_alignment": 8,
+        "reason": "设计轮廓清晰，背景干净，但顶部导光柱窗口的细节可能需要进一步优化以确保与状态指示灯的兼容性。分型线和装配螺钉位符合注塑和机加工逻辑。设计完整体现了需求中的结构特征，但顶部导光柱窗口的细节需要进一步确认。"
+      },
+      "vlm_verdict": "{\"score\": 9, \"background_clean\": true, \"fully_visible\": true, \"no_mirror_highlight\": true, \"led_window_visible\": true, \"mounting_ears_visible\": true, \"reason\": \"背景干净，产品完整，无镜面高光，顶部导光柱窗口与两侧安装耳清晰可见\"}",
+      "selected_for_3d": true
+    },
+    {
+      "concept_id": "concept_4",
+      "variant_name": "Minimalist Bauhaus",
+      "seed": 88403,
+      "flux_prompt": "Industrial wireless vibration + temperature/humidity 3-in-1 sensor enclosure mounted on a motor, 120 x 80 x 45 mm envelope, minimalist Bauhaus design with pure geometric volumes, restrained detailing and functional purity, PC+ABS injection molded top cover with 2.4mm nominal wall and 1.8 degree draft, top status LED light-pipe window, brushed aluminum CNC base with two M6 mounting ears, 4 x M4 hex socket screws clamping a silicone gasket, Single whole product only, isometric three-quarter view, centered in frame, orthographic-like lens (no wide-angle distortion). Isolated on solid flat neutral light grey background (#E5E5E5), no props, no text, no watermark. Even studio softbox diffuse lighting, ambient occlusion, no harsh cast shadows, no specular mirror highlights. Industrial product design prototype, clean CAD-like chamfered edges and visible parting lines, matte plastic and brushed aluminum texture, realistic industrial manufacturing proportions, flat matte surface finish suitable for photogrammetry-grade 3D reconstruction.",
+      "image_path": "D:\\hyperdesign\\workspace\\proj_20261014_001\\02_concepts\\concept_4_MinimalistBauhau_seed88403.png",
+      "comfy_filename": "hd_p2_MinimalistBauhau_seed88403_00001_.png",
+      "gen_seconds": 120.3,
+      "status": "generated",
+      "bg_check": {
+        "error": "ModuleNotFoundError(\"No module named 'PIL'\")",
+        "pass": false
+      },
+      "vlm_score": {
+        "geometry_clarity": 8,
+        "manufacturing_feasibility": 9,
+        "brief_alignment": 8,
+        "reason": "设计轮廓清晰，背景干净，但顶部导光柱窗口的细节可能需要进一步优化以确保与状态指示灯的兼容性。分型线和倒角符合注塑逻辑，但装配螺钉位的细节需要进一步确认是否符合实际装配需求。总体上，设计完整体现了需求中的结构特征。"
+      },
+      "vlm_verdict": "{\"score\": 9, \"background_clean\": true, \"fully_visible\": true, \"no_mirror_highlight\": true, \"led_window_visible\": true, \"mounting_ears_visible\": true, \"reason\": \"背景干净，产品完整，无镜面高光，顶部导光柱窗口与两侧安装耳清晰可见。\"}",
+      "selected_for_3d": false
+    }
+  ],
+  "mesh_metrics": {
+    "raw_file": "03_mesh/raw_trellis.glb",
+    "clean_glb": "03_mesh/white_model_clean.glb",
+    "clean_stl": "03_mesh/white_model_clean.stl",
+    "actual_bbox_mm": {
+      "x": 120.0,
+      "y": 130.97,
+      "z": 193.17
+    },
+    "proportion_ratio": [
+      0.62,
+      0.68,
+      1.0
+    ],
+    "face_count": 388391,
+    "vertex_count": 194162,
+    "unit": "mm",
+    "z_base": 0.0
+  },
+  "cad_verification": {
+    "engine": "FreeCAD 1.1.4 Part (OpenCascade) — CadQuery/OCP 本机不可用",
+    "script_file": "05_cad/parametric_model.py",
+    "step_file": "05_cad/parametric_model.step",
+    "is_valid_brep": true,
+    "volume_mm3": 69042.2,
+    "verified_bbox_mm": {
+      "x": 120.0,
+      "y": 80.0,
+      "z": 45.0
+    },
+    "verified_at": "2026-10-16T12:39:14"
+  },
+  "drawing_deliverables": {
+    "laser_1to1_dxf": "06_drawings/proj_20261014_001_laser_1to1.dxf",
+    "engineering_a3_dxf": "06_drawings/proj_20261014_001_engineering_A3.dxf",
+    "engineering_a3_pdf": "06_drawings/proj_20261014_001_engineering_A3.pdf",
+    "layers": [
+      "CUT_PROFILE",
+      "HIDDEN_LINE",
+      "DIMENSIONS",
+      "TITLE_BLOCK"
+    ],
+    "exported_at": "2026-10-16T12:40:42"
+  },
+  "human_feedback": {
+    "decision": "approve_for_cad",
+    "selected_concept_id": "concept_3",
+    "notes": "外壳壁厚锁定 2.4mm，四角预留 M4 螺钉柱；顶部导光柱窗口居中偏 X+25%；底部抽壳均匀 2.4mm。",
+    "timestamp": "2026-10-16T20:27:08.564814",
+    "adjusted_bbox_mm": {
+      "x": 120,
+      "y": 80,
+      "z": 45
+    }
+  },
+  "phase2": {
+    "base_seed": 88400,
+    "llm_model": "qwen38-uncensored-128k:latest",
+    "vlm_model": "qwen3.7-flash:latest",
+    "comfy_host": "127.0.0.1:8000",
+    "workflow": "D:\\hyperdesign\\src\\workflows\\flux2_concept_api.json",
+    "generated_at": "2026-10-16 12:18:41",
+    "num_candidates": 4
+  },
+  "phase7_dfm_report": {
+    "is_watertight": false,
+    "measured_p10_wall_mm": 1.51,
+    "measured_p90_wall_mm": 5.99,
+    "required_min_wall_mm": 2.4,
+    "measured_median_draft_deg": 0.84,
+    "required_min_draft_deg": 1.8,
+    "proportion_drift_pct": {
+      "x": 0.0,
+      "y": 63.71,
+      "z": 329.27
+    },
+    "over_thick_risk": true,
+    "face_count": 388391,
+    "dfm_hard_passed": false,
+    "evaluated_at": "2026-10-16T12:28:52"
+  }
+}

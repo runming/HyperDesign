@@ -1,0 +1,101 @@
+{
+  "project_id": "proj_20261014_001",
+  "product": "工业无线振动/温湿度三合一传感器外壳",
+  "spec": {
+    "bbox_mm": [
+      120,
+      80,
+      45
+    ],
+    "wall_mm": 2.4,
+    "draft_deg": 1.8,
+    "screws": "4xM4",
+    "gasket": "硅胶防水圈"
+  },
+  "phase": "7_evolution",
+  "phase_status": "completed",
+  "updated_at": "2026-10-16T14:07:05+08:00",
+  "phases": {
+    "1_brain_rag": {
+      "status": "completed",
+      "evidence": "01_brief/01_brief.md + qdrant mfg_knowledge_base(6条); 铁律校验 2.4/1.44/1.8 PASS"
+    },
+    "2_concepts": {
+      "status": "completed",
+      "evidence": "4/4 概念图 (FLUX.2-dev, base_seed=88400, 114~136s/张) + VLM 初筛 8/9/8"
+    },
+    "3_white_model": {
+      "status": "completed",
+      "evidence": "white_model_clean.glb/.stl; 388391 面; actual_bbox_mm 120x130.97x193.17; Z=0 基准"
+    },
+    "3_5_dfm_vlm_judge": {
+      "status": "completed_with_finding",
+      "evidence": "DFM 硬指标未通过(水密/p10壁厚1.51mm/拔模0.84deg) -> issues.md #14; VLM 四图打分完成"
+    },
+    "4_review_workbench": {
+      "status": "completed",
+      "evidence": "http://127.0.0.1:8004/review/proj_20261014_001; /api/submit_review 归档 3 条 DPO 样本对"
+    },
+    "5_cad_step": {
+      "status": "completed",
+      "evidence": "parametric_model.step 54869B; BRep 合法; volume 69042.2 mm3; bbox 120.0x80.0x45.0; 一次通过(0 轮自愈)"
+    },
+    "6_drawings": {
+      "status": "completed",
+      "evidence": "laser_1to1.dxf + engineering_A3.dxf(510 轮廓/3 尺寸/标题栏) + engineering_A3.pdf 300dpi"
+    },
+    "7_evolution": {
+      "status": "completed",
+      "evidence": "Unsloth QLoRA+DPO 实跑通过（Qwen2.5-7B-Instruct-bnb-4bit, LoRA r16, 40.37M 可训练参数 0.52%, 3 步 27.6s）；LoRA 适配器 models/checkpoints/lora_v20261016_1326/lora_adapter；GGUF q4_k_m 导出成功并注册进 Ollama -> hd-brain:v20261016_1326 (4.7GB)，冒烟推理通过；黄金基准集 harness(10 题) + 守门员对比脚本就绪（phase7_benchmark_eval.py 已跑出 scorecard JSON）",
+      "caveat": "本次仅用 3 条 DPO 样本做机制验证；《工程文件》建议攒够 50~100 条后再做正式进化，效果才会体现（新模型回答仍是基座 Qwen2.5 风格）"
+    }
+  },
+  "artifacts": {
+    "brief": "D:\\hyperdesign\\01_brief\\01_brief.md",
+    "manifest": "D:\\hyperdesign\\workspace\\proj_20261014_001\\manifest.json",
+    "concepts": "D:\\hyperdesign\\workspace\\proj_20261014_001\\02_concepts",
+    "mesh": "D:\\hyperdesign\\workspace\\proj_20261014_001\\03_mesh",
+    "step": "D:\\hyperdesign\\workspace\\proj_20261014_001\\05_cad\\parametric_model.step",
+    "drawings": "D:\\hyperdesign\\workspace\\proj_20261014_001\\06_drawings",
+    "dpo_dataset": "D:\\hyperdesign\\models\\checkpoints\\dpo_dataset",
+    "progress_log": "D:\\hyperdesign\\progress.log",
+    "issues": "D:\\hyperdesign\\issues.md",
+    "readme": "D:\\hyperdesign\\README.md",
+    "lora_adapter": "D:\\hyperdesign\\models\\checkpoints\\lora_v20261016_1326\\lora_adapter",
+    "gguf": "D:\\hyperdesign\\models\\checkpoints\\lora_v20261016_1326\\gguf_gguf\\Qwen2.5-7B-Instruct.Q4_K_M.gguf",
+    "ollama_model": "hd-brain:v20261016_1326",
+    "benchmark_suite": "D:\\hyperdesign\\src\\benchmark_suite.json"
+  },
+  "services": {
+    "comfyui": "http://127.0.0.1:8000",
+    "trellis": "http://127.0.0.1:8003",
+    "review_workbench": "http://127.0.0.1:8004/review/proj_20261014_001"
+  },
+  "blockers": [],
+  "open_findings": [
+    "issues.md #14 生成式白模 DFM 不达标（设计内预期，仅作 Phase5 造型锚点）",
+    "Phase7 正式进化需更多 DPO 样本（当前 3 条，仅机制验证）"
+  ],
+  "next": "累积 50~100 条 DPO 样本 -> 运行 src\\weekend_evolve.ps1 一键进化 + 黄金基准集守门员对比（新模型全面 >= 旧模型才切流）",
+  "phase7_gatekeeper": {
+    "benchmark": "bench_01_injection_box",
+    "old_model": {
+      "tag": "qwen38-uncensored-128k:latest",
+      "pass_at_1": "1/1",
+      "pass_at_3": "1/1",
+      "verified_bbox_mm": {
+        "x": 120.0,
+        "y": 80.0,
+        "z": 45.0
+      },
+      "volume_mm3": 70262.45
+    },
+    "new_model": {
+      "tag": "hd-brain:v20261016_1326",
+      "pass_at_1": "0/1",
+      "pass_at_3": "0/1"
+    },
+    "allowed_to_switch": false,
+    "note": "守门员禁止切流：样本不足(3条)时进化版不得上线 —— 机制验证通过，正式进化待样本累积"
+  }
+}

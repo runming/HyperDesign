@@ -1,0 +1,76 @@
+{
+  "version": "1.0",
+  "note": "HyperDesign 黄金基准集（Phase 7 守门员机制）—— 固定不变的制造业标准考题，微调后必须全面优于旧模型才允许切流",
+  "benchmarks": [
+    {
+      "id": "bench_01_injection_box",
+      "title": "二号车间标准工业传感器注塑上盖",
+      "target_bbox_mm": { "x": 120.0, "y": 80.0, "z": 45.0 },
+      "constraints": { "process": "注塑成型", "min_wall_thickness_mm": 2.4, "min_draft_angle_deg": 1.8 },
+      "notes": "底部抽壳壁厚2.4mm，四角带M4内六角螺钉柱，顶部居中开直径8mm导光孔"
+    },
+    {
+      "id": "bench_02_cnc_heatsink",
+      "title": "6061铝合金CNC车载控制器散热底座",
+      "target_bbox_mm": { "x": 160.0, "y": 110.0, "z": 25.0 },
+      "constraints": { "process": "CNC机加工", "min_wall_thickness_mm": 3.0, "min_draft_angle_deg": 0.0 },
+      "notes": "底板厚5mm，背部均匀排布6条宽3mm深15mm的散热鳍片槽，两侧带M6安装通孔耳"
+    },
+    {
+      "id": "bench_03_flange_adapter",
+      "title": "回转体法兰转接座",
+      "target_bbox_mm": { "x": 90.0, "y": 90.0, "z": 40.0 },
+      "constraints": { "process": "车铣复合", "min_wall_thickness_mm": 4.0, "min_draft_angle_deg": 0.0 },
+      "notes": "底部法兰盘外径90mm厚10mm，中心凸台外径50mm总高40mm，中心通孔直径28mm，法兰盘均布4个直径6.6mm通孔"
+    },
+    {
+      "id": "bench_04_sheetmetal_L",
+      "title": "L型钣金折弯安装支架 (SPCC 2.0mm)",
+      "target_bbox_mm": { "x": 150.0, "y": 90.0, "z": 60.0 },
+      "constraints": { "process": "激光切割+数控折弯", "min_wall_thickness_mm": 2.0, "min_draft_angle_deg": 0.0 },
+      "notes": "板厚2.0mm，90度折弯内R1.6，折弯扣除3.35mm，两翼各2个直径6.6mm安装孔"
+    },
+    {
+      "id": "bench_05_handheld_shell",
+      "title": "PC+ABS 手持终端上下壳 (跨度180mm)",
+      "target_bbox_mm": { "x": 180.0, "y": 90.0, "z": 35.0 },
+      "constraints": { "process": "注塑成型", "min_wall_thickness_mm": 2.4, "min_draft_angle_deg": 1.8 },
+      "notes": "名义壁厚2.4mm（严禁2.0mm），加强筋≤1.44mm，拔模≥1.8度，四角M3螺钉柱"
+    },
+    {
+      "id": "bench_06_din_rail_clip",
+      "title": "DIN 导轨卡扣安装座",
+      "target_bbox_mm": { "x": 70.0, "y": 45.0, "z": 30.0 },
+      "constraints": { "process": "注塑成型", "min_wall_thickness_mm": 2.4, "min_draft_angle_deg": 1.8 },
+      "notes": "底部 35mm 标准 DIN 导轨卡槽，顶部 M4 固定孔，卡扣弹性臂厚 2.4mm"
+    },
+    {
+      "id": "bench_07_slider_block",
+      "title": "直线导轨滑块安装块",
+      "target_bbox_mm": { "x": 80.0, "y": 60.0, "z": 25.0 },
+      "constraints": { "process": "CNC机加工", "min_wall_thickness_mm": 3.0, "min_draft_angle_deg": 0.0 },
+      "notes": "底面 4 个 M5 沉头孔，顶面 2 条宽 8mm 深 4mm 的定位槽，中心 M8 螺纹孔"
+    },
+    {
+      "id": "bench_08_round_cover",
+      "title": "回转体仪器端盖",
+      "target_bbox_mm": { "x": 100.0, "y": 100.0, "z": 20.0 },
+      "constraints": { "process": "注塑成型", "min_wall_thickness_mm": 2.4, "min_draft_angle_deg": 1.8 },
+      "notes": "外径100mm圆盘，壁厚2.4mm，中心直径20mm通孔，均布6个直径4.5mm螺钉过孔"
+    },
+    {
+      "id": "bench_09_raspi_case",
+      "title": "树莓派工业外壳底座",
+      "target_bbox_mm": { "x": 95.0, "y": 65.0, "z": 30.0 },
+      "constraints": { "process": "注塑成型", "min_wall_thickness_mm": 2.4, "min_draft_angle_deg": 1.8 },
+      "notes": "内部四角 M2.5 螺钉柱，两侧 Type-C 与 HDMI 开口，底面磁吸沉孔"
+    },
+    {
+      "id": "bench_10_battery_tray",
+      "title": "铝合金电池托盘",
+      "target_bbox_mm": { "x": 200.0, "y": 120.0, "z": 40.0 },
+      "constraints": { "process": "CNC机加工", "min_wall_thickness_mm": 3.0, "min_draft_angle_deg": 0.0 },
+      "notes": "底板厚 6mm，四周边框高 40mm，内部加强筋厚 3mm，两端各 2 个 M8 固定耳"
+    }
+  ]
+}

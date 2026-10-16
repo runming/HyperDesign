@@ -1,0 +1,38 @@
+{
+  "project_id": "bench_01_injection_box",
+  "product": "二号车间标准工业传感器注塑上盖",
+  "target_bbox_mm": {
+    "x": 120.0,
+    "y": 80.0,
+    "z": 45.0
+  },
+  "mfg_constraints": {
+    "process": "注塑成型",
+    "min_wall_thickness_mm": 2.4,
+    "min_draft_angle_deg": 1.8
+  },
+  "manufacturing_constraints": {
+    "process": "注塑成型",
+    "min_wall_thickness_mm": 2.4,
+    "min_draft_angle_deg": 1.8
+  },
+  "mesh_metrics": {
+    "clean_stl": "03_mesh/white_model_clean.stl"
+  },
+  "human_feedback": {
+    "notes": "底部抽壳壁厚2.4mm，四角带M4内六角螺钉柱，顶部居中开直径8mm导光孔"
+  },
+  "cad_verification": {
+    "engine": "FreeCAD 1.1.4 Part (OpenCascade) — CadQuery/OCP 本机不可用",
+    "script_file": "05_cad/parametric_model.py",
+    "step_file": "05_cad/parametric_model.step",
+    "is_valid_brep": true,
+    "volume_mm3": 70262.45,
+    "verified_bbox_mm": {
+      "x": 120.0,
+      "y": 80.0,
+      "z": 45.0
+    },
+    "verified_at": "2026-10-16T14:06:47"
+  }
+}

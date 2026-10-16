@@ -1,0 +1,22 @@
+[
+  {
+    "variant_name": "Hard Angular Faceted",
+    "flux_prompt": "Industrial wireless vibration + temperature/humidity 3-in-1 sensor enclosure mounted on a motor, 120 x 80 x 45 mm envelope, hard-edged faceted architecture with crisp planar chamfered surfaces, angular bold silhouette, PC+ABS injection molded top cover with 2.4mm nominal wall and 1.8 degree draft, top status LED light-pipe window, brushed aluminum CNC base with two M6 mounting ears, 4 x M4 hex socket screws clamping a silicone gasket, Single whole product only, isometric three-quarter view, centered in frame, orthographic-like lens (no wide-angle distortion). Isolated on solid flat neutral light grey background (#E5E5E5), no props, no text, no watermark. Even studio softbox diffuse lighting, ambient occlusion, no harsh cast shadows, no specular mirror highlights. Industrial product design prototype, clean CAD-like chamfered edges and visible parting lines, matte plastic and brushed aluminum texture, realistic industrial manufacturing proportions, flat matte surface finish suitable for photogrammetry-grade 3D reconstruction.",
+    "seed": 88400
+  },
+  {
+    "variant_name": "Rounded Streamlined",
+    "flux_prompt": "Industrial wireless vibration + temperature/humidity 3-in-1 sensor enclosure mounted on a motor, 120 x 80 x 45 mm envelope, soft rounded streamlined surfaces with generous continuous fillets and smooth organic flow, PC+ABS injection molded top cover with 2.4mm nominal wall and 1.8 degree draft, top status LED light-pipe window, brushed aluminum CNC base with two M6 mounting ears, 4 x M4 hex socket screws clamping a silicone gasket, Single whole product only, isometric three-quarter view, centered in frame, orthographic-like lens (no wide-angle distortion). Isolated on solid flat neutral light grey background (#E5E5E5), no props, no text, no watermark. Even studio softbox diffuse lighting, ambient occlusion, no harsh cast shadows, no specular mirror highlights. Industrial product design prototype, clean CAD-like chamfered edges and visible parting lines, matte plastic and brushed aluminum texture, realistic industrial manufacturing proportions, flat matte surface finish suitable for photogrammetry-grade 3D reconstruction.",
+    "seed": 88401
+  },
+  {
+    "variant_name": "Modular Armored",
+    "flux_prompt": "Industrial wireless vibration + temperature/humidity 3-in-1 sensor enclosure mounted on a motor, 120 x 80 x 45 mm envelope, modular armored construction with visible bolted sub-panels and rugged machined armor plates, PC+ABS injection molded top cover with 2.4mm nominal wall and 1.8 degree draft, top status LED light-pipe window, brushed aluminum CNC base with two M6 mounting ears, 4 x M4 hex socket screws clamping a silicone gasket, Single whole product only, isometric three-quarter view, centered in frame, orthographic-like lens (no wide-angle distortion). Isolated on solid flat neutral light grey background (#E5E5E5), no props, no text, no watermark. Even studio softbox diffuse lighting, ambient occlusion, no harsh cast shadows, no specular mirror highlights. Industrial product design prototype, clean CAD-like chamfered edges and visible parting lines, matte plastic and brushed aluminum texture, realistic industrial manufacturing proportions, flat matte surface finish suitable for photogrammetry-grade 3D reconstruction.",
+    "seed": 88402
+  },
+  {
+    "variant_name": "Minimalist Bauhaus",
+    "flux_prompt": "Industrial wireless vibration + temperature/humidity 3-in-1 sensor enclosure mounted on a motor, 120 x 80 x 45 mm envelope, minimalist Bauhaus design with pure geometric volumes, restrained detailing and functional purity, PC+ABS injection molded top cover with 2.4mm nominal wall and 1.8 degree draft, top status LED light-pipe window, brushed aluminum CNC base with two M6 mounting ears, 4 x M4 hex socket screws clamping a silicone gasket, Single whole product only, isometric three-quarter view, centered in frame, orthographic-like lens (no wide-angle distortion). Isolated on solid flat neutral light grey background (#E5E5E5), no props, no text, no watermark. Even studio softbox diffuse lighting, ambient occlusion, no harsh cast shadows, no specular mirror highlights. Industrial product design prototype, clean CAD-like chamfered edges and visible parting lines, matte plastic and brushed aluminum texture, realistic industrial manufacturing proportions, flat matte surface finish suitable for photogrammetry-grade 3D reconstruction.",
+    "seed": 88403
+  }
+]

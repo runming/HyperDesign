@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<title>HyperDesign 3D 白模交互审阅台</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif; background: #14171a; color: #e1e8ed; display: flex; height: 100vh; overflow: hidden; }
+  #viewport { flex: 1; position: relative; }
+  #hud { position: absolute; top: 16px; left: 16px; background: rgba(20,23,26,0.85); padding: 12px 16px; border-radius: 8px; border: 1px solid #2f3640; pointer-events: none; font-size: 13px; line-height: 1.6; }
+  #sidebar { width: 380px; background: #1e2227; border-left: 1px solid #2f3640; padding: 20px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; }
+  h2 { font-size: 16px; color: #00a8ff; border-bottom: 1px solid #2f3640; padding-bottom: 8px; }
+  .control-group { display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
+  .row { display: flex; gap: 8px; align-items: center; }
+  input[type="number"], textarea, select { width: 100%; background: #14171a; border: 1px solid #3d4652; color: #fff; padding: 8px; border-radius: 4px; }
+  .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .concept-card { border: 2px solid transparent; border-radius: 6px; overflow: hidden; cursor: pointer; position: relative; background:#14171a; }
+  .concept-card.active { border-color: #00a8ff; }
+  .concept-card img { width: 100%; display: block; }
+  .concept-card .cap { font-size: 11px; padding: 4px 6px; color: #9fb3c8; }
+  .btn { padding: 10px 14px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+  .btn-primary { background: #00a8ff; color: #fff; }
+  .btn-success { background: #2ecc71; color: #14171a; }
+  .btn-danger { background: #e84118; color: #fff; }
+  .muted { color:#9fb3c8; font-size:12px; }
+</style>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.168.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.168.0/examples/jsm/"
+  }
+}
+</script>
+</head>
+<body>
+<div id="viewport">
+  <div id="hud">
+    <div><strong>项目编号：</strong><span id="hud-proj">__PROJECT_ID__</span></div>
+    <div><strong>白模测量包络 (mm)：</strong><span id="hud-bbox">加载中...</span></div>
+    <div><strong>拓扑面数：</strong><span id="hud-faces">-</span> | <strong>操作：</strong>左键旋转 / 右键平移 / 滚轮缩放</div>
+    <div class="muted" id="hud-state"></div>
+  </div>
+</div>
+<div id="sidebar">
+  <h2>1. 视图与几何诊断工具</h2>
+  <div class="control-group">
+    <label class="row"><input type="checkbox" id="toggle-wireframe" /> 叠加拓扑线框 (检查网格疏密与倒角)</label>
+    <label class="row"><input type="checkbox" id="toggle-bbox" checked /> 显示物理包络盒与基准网格</label>
+    <label>Z 轴实时截面剖析 (mm): <span id="clip-val">100</span>%</label>
+    <input type="range" id="clip-slider" min="1" max="100" value="100" />
+    <label class="row"><input type="checkbox" id="toggle-clip" /> 启用剖切 (关闭则显示完整白模)</label>
+  </div>
+
+  <h2>2. 2D 概念母本对比 (点击勾选优胜方案)</h2>
+  <div class="concept-grid" id="concept-list"></div>
+
+  <h2>3. 锁定 CAD 建模目标包络 (mm)</h2>
+  <div class="row">
+    <div>X(长)<input type="number" id="bbox-x" step="0.5" /></div>
+    <div>Y(宽)<input type="number" id="bbox-y" step="0.5" /></div>
+    <div>Z(高)<input type="number" id="bbox-z" step="0.5" /></div>
+  </div>
+
+  <h2>4. 工艺批注与进化闭环 (Phase 7 DPO)</h2>
+  <div class="control-group">
+    <textarea id="designer-notes" rows="3" placeholder="输入对 Phase 5 CAD 的结构指令（如：四角固定孔用M4沉头孔，底面壁厚加到2.5mm）..."></textarea>
+  </div>
+  <button class="btn btn-success" id="btn-approve">通过白模 -> 锁定参数并记录 DPO 正样本</button>
+  <button class="btn btn-danger" id="btn-reject">白模比例失真 -> 标记负样本并重跑</button>
+  <div id="status-msg" style="font-size:12px; color:#2ecc71;"></div>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+const PROJECT_ID = "__PROJECT_ID__";
+const container = document.getElementById('viewport');
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x14171a);
+
+const camera = new THREE.PerspectiveCamera(40, container.clientWidth / container.clientHeight, 1, 4000);
+camera.position.set(180, 140, 180);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(container.clientWidth, container.clientHeight);
+renderer.localClippingEnabled = true;
+container.appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+
+// 工业三点式柔光照明
+scene.add(new THREE.HemisphereLight(0xffffff, 0x444455, 1.2));
+const keyLight = new THREE.DirectionalLight(0xffffff, 1.5);
+keyLight.position.set(150, 250, 200);
+scene.add(keyLight);
+const rimLight = new THREE.DirectionalLight(0x88bbff, 0.8);
+rimLight.position.set(-150, 100, -150);
+scene.add(rimLight);
+
+// 200mm 工业坐标基准网 (每格 10mm)
+const grid = new THREE.GridHelper(240, 24, 0x00a8ff, 0x2f3640);
+scene.add(grid);
+
+const clipPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 200);
+let loadedMesh = null;
+let bboxHelper = null;
+let maxHeight = 100;
+let selectedConceptId = "";
+let clipEnabled = true;
+
+async function init() {
+  const res = await fetch(`/api/project/${PROJECT_ID}`);
+  const manifest = await res.json();
+  const metrics = manifest.mesh_metrics || {};
+  const actual = metrics.actual_bbox_mm || manifest.target_bbox_mm || {x: 120, y: 80, z: 45};
+  maxHeight = Math.max(actual.z || 45, 1);
+  clipPlane.constant = maxHeight * 1.05;
+
+  document.getElementById('hud-bbox').innerText = `${actual.x} × ${actual.y} × ${actual.z} mm`;
+  document.getElementById('hud-faces').innerText = metrics.face_count || '-';
+  document.getElementById('bbox-x').value = actual.x;
+  document.getElementById('bbox-y').value = actual.y;
+  document.getElementById('bbox-z').value = actual.z;
+
+  const hf = manifest.human_feedback || {};
+  if (hf.decision) {
+    document.getElementById('hud-state').innerText =
+      `已审阅: ${hf.decision} @ ${hf.timestamp || ''} ${hf.notes ? '| 批注: ' + hf.notes : ''}`;
+    if (hf.notes) document.getElementById('designer-notes').value = hf.notes;
+  }
+
+  // 2D 概念图选品卡片
+  const conceptList = document.getElementById('concept-list');
+  const cands = manifest.phase2_candidates || [];
+  const preSelected = hf.selected_concept_id || (cands[0] && (cands[0].id || cands[0].concept_id));
+  selectedConceptId = preSelected || "";
+  cands.forEach((c) => {
+    const cid = c.id || c.concept_id;
+    const card = document.createElement('div');
+    card.className = 'concept-card' + (cid === selectedConceptId ? ' active' : '');
+    const vs = c.vlm_score;
+    let score = '';
+    if (vs && typeof vs === 'object') {
+      if (typeof vs.geometry_clarity === 'number') {
+        const avg = ((vs.geometry_clarity + vs.manufacturing_feasibility + vs.brief_alignment) / 3).toFixed(1);
+        score = `VLM 均分 ${avg}`;
+      } else if (typeof vs.score === 'number') {
+        score = `VLM ${vs.score}`;
+      }
+    } else if (typeof vs === 'number') {
+      score = `VLM ${vs}`;
+    }
+    card.innerHTML = `<img src="/files/${PROJECT_ID}/${c.file}" title="${c.variant_name || cid}" />
+                      <div class="cap">${c.variant_name || cid} ${score ? '· ' + score : ''}</div>`;
+    card.onclick = () => {
+      document.querySelectorAll('.concept-card').forEach(el => el.classList.remove('active'));
+      card.classList.add('active');
+      selectedConceptId = cid;
+    };
+    conceptList.appendChild(card);
+  });
+
+  // 加载 Phase 3 清洗后的白模 GLB
+  const glbUrl = `/files/${PROJECT_ID}/${metrics.clean_glb || '03_mesh/white_model_clean.glb'}`;
+  document.getElementById('hud-state').innerText = '白模加载中: ' + glbUrl;
+  new GLTFLoader().load(glbUrl, (gltf) => {
+    loadedMesh = gltf.scene;
+    loadedMesh.traverse(child => {
+      if (child.isMesh) {
+        if (!child.material) child.material = new THREE.MeshStandardMaterial({color: 0xb8bcc0});
+        child.material.clippingPlanes = clipEnabled ? [clipPlane] : [];
+        child.material.clipShadows = true;
+        child.material.side = THREE.DoubleSide;
+        child.material.needsUpdate = true;
+      }
+    });
+    scene.add(loadedMesh);
+    bboxHelper = new THREE.BoxHelper(loadedMesh, 0x00a8ff);
+    scene.add(bboxHelper);
+    // 相机自动取景
+    const box = new THREE.Box3().setFromObject(loadedMesh);
+    const size = box.getSize(new THREE.Vector3());
+    const d = Math.max(size.x, size.y, size.z) * 2.0 || 300;
+    camera.position.set(d * 0.62, d * 0.5, d * 0.62);
+    controls.target.copy(box.getCenter(new THREE.Vector3()));
+    controls.update();
+    document.getElementById('hud-state').innerText = '白模已加载 ✓';
+  }, undefined, (err) => {
+    document.getElementById('hud-state').innerText = '白模加载失败: ' + err;
+  });
+}
+
+document.getElementById('toggle-wireframe').onchange = (e) => {
+  if (!loadedMesh) return;
+  loadedMesh.traverse(c => { if (c.isMesh) c.material.wireframe = e.target.checked; });
+};
+document.getElementById('toggle-bbox').onchange = (e) => {
+  if (bboxHelper) bboxHelper.visible = e.target.checked;
+  grid.visible = e.target.checked;
+};
+document.getElementById('clip-slider').oninput = (e) => {
+  const pct = parseFloat(e.target.value);
+  document.getElementById('clip-val').innerText = pct;
+  clipPlane.constant = (pct / 100.0) * maxHeight * 1.05;
+};
+document.getElementById('toggle-clip').onchange = (e) => {
+  clipEnabled = e.target.checked;
+  if (!loadedMesh) return;
+  loadedMesh.traverse(c => {
+    if (c.isMesh) {
+      c.material.clippingPlanes = clipEnabled ? [clipPlane] : [];
+      c.material.needsUpdate = true;
+    }
+  });
+};
+
+async function submitDecision(decision) {
+  const payload = {
+    project_id: PROJECT_ID,
+    selected_concept_id: selectedConceptId,
+    decision: decision,
+    adjusted_bbox_mm: {
+      x: parseFloat(document.getElementById('bbox-x').value),
+      y: parseFloat(document.getElementById('bbox-y').value),
+      z: parseFloat(document.getElementById('bbox-z').value)
+    },
+    designer_notes: document.getElementById('designer-notes').value
+  };
+  const res = await fetch('/api/submit_review', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(payload)
+  });
+  const data = await res.json();
+  document.getElementById('status-msg').innerText = data.message;
+}
+document.getElementById('btn-approve').onclick = () => submitDecision('approve_for_cad');
+document.getElementById('btn-reject').onclick = () => submitDecision('reject_regenerate');
+
+window.addEventListener('resize', () => {
+  camera.aspect = container.clientWidth / container.clientHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(container.clientWidth, container.clientHeight);
+});
+
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
+init();
+animate();
+</script>
+</body>
+</html>
